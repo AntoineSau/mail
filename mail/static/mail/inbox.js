@@ -38,15 +38,15 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  // Test Fetching data from (1.) inbox and (2.) the requested mailbox {mailbox}
-  // ERROR inbox and arhcived becasue of recipeints error from Django Admin
+  // Fetching data from the requested mailbox {mailbox}
+  // ERROR inbox and archived because of recipients error from Django Admin
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
     // check on Console what data is passed in
     console.log(emails);
-    // Print in HTML
-    emails.forEach(element => document.querySelector('#test').innerHTML = `SENT TO ${element.recipients} ON ${element.timestamp}. SUBJECT: ${element.subject}`)
+    // Looping over all emails from chosen mailbox and print each one: 
+    emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<li>SENT TO ${element.recipients} ON ${element.timestamp}. SUBJECT: ${element.subject}</li>`)
   });
 
 
