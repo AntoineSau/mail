@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 
-  // Test Form getting data but not posting
+  // Check is form is submitted
   document.querySelector('form').onsubmit = function () {
-    // Getting data from form
+    // Get data from form and save it as new email
     fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
@@ -19,36 +19,31 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(result => {
-      // Print result
+      // Print result in console and "messages" div
       console.log(result);
       document.querySelector('#messages').innerHTML = `<b>${Object.values(result)}</b>`;
+      // Opening manually Sent mailbox, becasue I watn to dispaly error message if needed, coudl also call fucntion
+      let mailbox = 'sent';
+      document.querySelector('#emails-view').style.display = 'block';
+      document.querySelector('#compose-view').style.display = 'none';
+      
+      // Hide "messages" div and reset its innterhtml to Nonde
+      document.querySelector('#messages').style.display = 'block';
+
+      // Show the mailbox name
+      document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+      // Fetching data from the requested mailbox {mailbox}
+      fetch(`/emails/${mailbox}`)
+      .then(response => response.json())
+      .then(emails => {
+        // check on Console what data is passed in
+        console.log(emails);
+        // Looping over all emails from chosen mailbox and print each one: 
+        emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div class="divmails">FROM ${element.sender} TO ${element.recipients}. SUBJECT: ${element.subject}. TIMESTAMP: ${element.timestamp}. </div>`)
+      });
     });
 
-    // Display Sent emails
-    // Show the mailbox and hide other views
-    // Show compose view and hide other views
-    document.querySelector('#emails-view').style.display = 'block';
-    document.querySelector('#compose-view').style.display = 'none';
-    
-    // Printing message
-    document.querySelector('#messages').style.display = 'block';
-    
-
-    // Retrive "sent" mailbox
-    let mailbox = 'sent';
-
-    // Show the mailbox name
-    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
-    // Fetching data from the requested mailbox {mailbox}
-    fetch(`/emails/${mailbox}`)
-    .then(response => response.json())
-    .then(emails => {
-      // check on Console what data is passed in
-      console.log(emails);
-      // Looping over all emails from chosen mailbox and print each one: 
-      emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div>SENT TO ${element.recipients} ON ${element.timestamp}. SUBJECT: ${element.subject}</div>`)
-    });
 
     // Stop form from submitting
     return false;
@@ -56,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // By default, load the inbox
-  load_mailbox('inbox')
+  load_mailbox('inbox');
 
 });
 
@@ -67,7 +62,7 @@ function compose_email() {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
   
-  // Test Print
+  // Hide "messages" div and reset its innterhtml to Nonde
   document.querySelector('#messages').style.display = 'block';
   document.querySelector('#messages').innerHTML = '';
 
@@ -83,7 +78,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
   
-  // Test
+  // Hide "messages" div and reset its innterhtml to Nonde
   document.querySelector('#messages').style.display = 'block';
   document.querySelector('#messages').innerHTML = '';
 
@@ -97,7 +92,7 @@ function load_mailbox(mailbox) {
     // check on Console what data is passed in
     console.log(emails);
     // Looping over all emails from chosen mailbox and print each one: 
-    emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div>SENT TO ${element.recipients} ON ${element.timestamp}. SUBJECT: ${element.subject}</div>`)
+    emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div class="divmails">FROM ${element.sender} TO ${element.recipients}. SUBJECT: ${element.subject}. TIMESTAMP: ${element.timestamp}. </div>`)
   });
 
 }

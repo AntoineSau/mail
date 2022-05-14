@@ -2,3 +2,10 @@ textarea {
     min-height: 400px;
 }
 
+.divmails {
+    border:black;
+    border-width: 1px;
+    border-style: solid;
+    margin: 5px;
+    padding: 5px;
+}
