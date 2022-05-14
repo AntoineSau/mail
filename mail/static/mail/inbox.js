@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // Print result in console and "messages" div
       console.log(result);
       document.querySelector('#messages').innerHTML = `<b>${Object.values(result)}</b>`;
-      // Opening manually Sent mailbox, becasue I watn to dispaly error message if needed, coudl also call fucntion
+
+      // Displaying manually Sent mailbox, because I want to display the error message if needed, I could also call function
       let mailbox = 'sent';
       document.querySelector('#emails-view').style.display = 'block';
       document.querySelector('#compose-view').style.display = 'none';
@@ -40,10 +41,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // check on Console what data is passed in
         console.log(emails);
         // Looping over all emails from chosen mailbox and print each one: 
-        emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div class="divmails">FROM ${element.sender} TO ${element.recipients}. SUBJECT: ${element.subject}. TIMESTAMP: ${element.timestamp}. </div>`)
+        emails.forEach(element => document.querySelector('#emails-view').innerHTML += 
+        `<div class="divmails">
+        FROM ${element.sender}. 
+        TO ${element.recipients}. 
+        SUBJECT: ${element.subject}. 
+        TIMESTAMP: ${element.timestamp}. 
+        READ? ${element.read}.
+        </div>`)
       });
     });
-
 
     // Stop form from submitting
     return false;
@@ -92,7 +99,17 @@ function load_mailbox(mailbox) {
     // check on Console what data is passed in
     console.log(emails);
     // Looping over all emails from chosen mailbox and print each one: 
-    emails.forEach(element => document.querySelector('#emails-view').innerHTML += `<div class="divmails">FROM ${element.sender} TO ${element.recipients}. SUBJECT: ${element.subject}. TIMESTAMP: ${element.timestamp}. </div>`)
+    emails.forEach(element => 
+      
+      document.querySelector('#emails-view').innerHTML += 
+      `<div class="divmails">
+      FROM ${element.sender} 
+      TO ${element.recipients}. 
+      SUBJECT: ${element.subject}. 
+      TIMESTAMP: ${element.timestamp}. 
+      READ? ${element.read}.
+      </div>`)
+
   });
 
 }

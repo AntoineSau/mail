@@ -9,3 +9,12 @@ textarea {
     margin: 5px;
     padding: 5px;
 }
+
+.divmailsread {
+    border:black;
+    border-width: 1px;
+    border-style: solid;
+    margin: 5px;
+    padding: 5px;
+    background-color: grey;
+}
