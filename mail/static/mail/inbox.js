@@ -99,7 +99,17 @@ function load_mailbox(mailbox) {
     // check on Console what data is passed in
     console.log(emails);
     // Looping over all emails from chosen mailbox and print each one: 
-    emails.forEach(element => 
+    emails.forEach(element => { 
+      if (element.read === true) {
+      document.querySelector('#emails-view').innerHTML += 
+    `<div class="divmailsread">
+    FROM ${element.sender} 
+    TO ${element.recipients}. 
+    SUBJECT: ${element.subject}. 
+    TIMESTAMP: ${element.timestamp}. 
+    (READ? ${element.read}.) Email already READ.
+    </div>`;
+    } else {
       
       document.querySelector('#emails-view').innerHTML += 
       `<div class="divmails">
@@ -107,9 +117,9 @@ function load_mailbox(mailbox) {
       TO ${element.recipients}. 
       SUBJECT: ${element.subject}. 
       TIMESTAMP: ${element.timestamp}. 
-      READ? ${element.read}.
-      </div>`)
-
-  });
-
+      READ? ${element.read}. Email is UNREAD.
+      </div>`;
+      }
+    }
+  )});
 }
