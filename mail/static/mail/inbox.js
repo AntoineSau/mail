@@ -95,15 +95,36 @@ function view_email(emailid) {
   document.querySelector('#messages').style.display = 'block';
   document.querySelector('#messages').innerHTML = '';
 
-  // Show emails div and popualte it
-  document.querySelector('#emails').style.display = 'block';
-  document.querySelector('#emails').innerHTML = emailid;
+  // Mark this email as READ
+  fetch(`/emails/${emailid}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+    })
+  })
 
-
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+  // Get the email with GET request
+  fetch(`/emails/${emailid}`)
+  .then(response => response.json())
+  .then(email => {
+    console.log(email);
+   
+    // Show emails div, empty it be fedault, and populate it with relevant content
+    document.querySelector('#emails').style.display = 'block';
+    document.querySelector('#emails').innerHTML = '';
+    document.querySelector('#emails').innerHTML += `<p><b>From:</b> ${email.sender}</p>`;
+    document.querySelector('#emails').innerHTML += `<p><b>To:</b> ${email.recipients}</p>`;
+    document.querySelector('#emails').innerHTML += `<p><b>Subject:</b> ${email.subject}</p>`;
+    document.querySelector('#emails').innerHTML += `<p><b>Timestamps:</b> ${email.timestamp}</p>`;
+    document.querySelector('#emails').innerHTML += `<p><b>TODO BUTTON:</b></p>`;
+    document.querySelector('#emails').innerHTML += `<p>${email.body}</p>`;
+    
+    // Clear out composition fields
+    document.querySelector('#compose-recipients').value = '';
+    document.querySelector('#compose-subject').value = '';
+    document.querySelector('#compose-body').value = '';
+  });
+  
 }
 
 function load_mailbox(mailbox) {
