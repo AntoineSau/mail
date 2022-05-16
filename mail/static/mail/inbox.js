@@ -43,16 +43,32 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(emails => {
         // check on Console what data is passed in
         console.log(emails);
-        // Looping over all emails from chosen mailbox and print each one: 
-        emails.forEach(element => document.querySelector('#emails-view').innerHTML += 
-        `<div class="divmails">
-        FROM ${element.sender}. 
+        // Looping over all emails from chosen mailbox and print each one, checking if email is read or not
+        emails.forEach(element => { 
+          if (element.read === true) {
+          document.querySelector('#emails-view').innerHTML += 
+        `<div class="divmailsread">
+        FROM ${element.sender} 
         TO ${element.recipients}. 
         SUBJECT: ${element.subject}. 
         TIMESTAMP: ${element.timestamp}. 
-        READ? ${element.read}.
-        </div>`)
-      });
+        Email already READ.
+        <a href="javascript:void(0);" onclick="view_email(${element.id});">Open email</a>
+        </div>`;
+        } else {
+          
+          document.querySelector('#emails-view').innerHTML += 
+          `<div class="divmails">
+          FROM ${element.sender} 
+          TO ${element.recipients}. 
+          SUBJECT: ${element.subject}. 
+          TIMESTAMP: ${element.timestamp}. 
+          Email is UNREAD.
+          <a href="javascript:void(0);" onclick="view_email(${element.id});">Open email</a>
+          </div>`;
+          }
+        }
+      )});
     });
 
     // Stop form from submitting
