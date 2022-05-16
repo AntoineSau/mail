@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
-
+ 
   // Check is form is submitted
   document.querySelector('form').onsubmit = function () {
     // Get data from form and save it as new email
@@ -101,6 +101,25 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+function reply_email() {
+
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+  
+  // Hide "messages" div and reset its innterhtml to None
+  document.querySelector('#messages').style.display = 'block';
+  document.querySelector('#messages').innerHTML = 'we want to reply to an email!';
+
+  // Hide emails div
+  document.querySelector('#emails').style.display = 'none';
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = '';
+  document.querySelector('#compose-subject').value = '';
+  document.querySelector('#compose-body').value = '';
+}
+
 function view_email(emailid) {
   
   // Show compose view and hide other views
@@ -125,14 +144,17 @@ function view_email(emailid) {
   .then(email => {
     console.log(email);
    
-    // Show emails div, empty it be fedault, and populate it with relevant content
+    // Show emails div, empty it be default, and populate it with relevant content
     document.querySelector('#emails').style.display = 'block';
     document.querySelector('#emails').innerHTML = '';
     document.querySelector('#emails').innerHTML += `<p><b>From:</b> ${email.sender}</p>`;
     document.querySelector('#emails').innerHTML += `<p><b>To:</b> ${email.recipients}</p>`;
     document.querySelector('#emails').innerHTML += `<p><b>Subject:</b> ${email.subject}</p>`;
-    document.querySelector('#emails').innerHTML += `<p><b>Timestamps:</b> ${email.timestamp}</p>`;
-    document.querySelector('#emails').innerHTML += `<p><b>TODO BUTTON:</b></p>`;
+    document.querySelector('#emails').innerHTML += `<p><b>Timestamp:</b> ${email.timestamp}</p>`;
+    // Adding a button for the user to reply and appply it a function
+    document.querySelector('#emails').innerHTML += `<button onclick="reply_email()" class="btn btn-sm btn-outline-primary" id="replytoemail">Reply</button>`;
+    // Displaying a solid line and the body of the email
+    document.querySelector('#emails').innerHTML += `<hr>`;
     document.querySelector('#emails').innerHTML += `<p>${email.body}</p>`;
     
     // Clear out composition fields
