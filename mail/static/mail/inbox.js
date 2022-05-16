@@ -101,23 +101,33 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
-function reply_email() {
+function reply_email(email) {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  console.log(email);
   
   // Hide "messages" div and reset its innterhtml to None
   document.querySelector('#messages').style.display = 'block';
-  document.querySelector('#messages').innerHTML = 'we want to reply to an email!';
+  document.querySelector('#messages').innerHTML = `We want to reply to an email number ${email}`;
 
   // Hide emails div
   document.querySelector('#emails').style.display = 'none';
 
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+  // Retrieve email data to populate fields
+  fetch(`/emails/${email}`)
+  .then(response => response.json())
+  .then(email => {
+    console.log(email);
+
+    // Populate composition fields with data from email that we answer to
+    document.querySelector('#compose-recipients').value = `${email.sender}`;
+    document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+    document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote "${email.body}"`;
+  
+  });
+
 }
 
 function view_email(emailid) {
@@ -152,7 +162,7 @@ function view_email(emailid) {
     document.querySelector('#emails').innerHTML += `<p><b>Subject:</b> ${email.subject}</p>`;
     document.querySelector('#emails').innerHTML += `<p><b>Timestamp:</b> ${email.timestamp}</p>`;
     // Adding a button for the user to reply and appply it a function
-    document.querySelector('#emails').innerHTML += `<button onclick="reply_email()" class="btn btn-sm btn-outline-primary" id="replytoemail">Reply</button>`;
+    document.querySelector('#emails').innerHTML += `<button onclick="reply_email(${email.id})" class="btn btn-sm btn-outline-primary" id="replytoemail">Reply</button>`;
     // Displaying a solid line and the body of the email
     document.querySelector('#emails').innerHTML += `<hr>`;
     document.querySelector('#emails').innerHTML += `<p>${email.body}</p>`;
