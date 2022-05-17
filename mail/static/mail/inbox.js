@@ -110,7 +110,8 @@ function reply_email(email) {
   
   // Hide "messages" div and reset its innterhtml to None
   document.querySelector('#messages').style.display = 'block';
-  document.querySelector('#messages').innerHTML = `We want to reply to an email number ${email}`;
+  // Print to check if email id is passed in
+  // document.querySelector('#messages').innerHTML = `We want to reply to an email number ${email}`;
 
   // Hide emails div
   document.querySelector('#emails').style.display = 'none';
@@ -123,7 +124,11 @@ function reply_email(email) {
 
     // Populate composition fields with data from email that we answer to
     document.querySelector('#compose-recipients').value = `${email.sender}`;
+    if (email.subject.includes('Re: ') === true) {
+      document.querySelector('#compose-subject').value = `${email.subject}`; 
+    } else {
     document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+    }
     document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote "${email.body}"`;
   
   });
