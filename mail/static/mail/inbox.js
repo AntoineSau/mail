@@ -135,6 +135,28 @@ function reply_email(email) {
 
 }
 
+function unarchive_email(emailid) {
+  // Mark this email as UNARCHIVED
+  fetch(`/emails/${emailid}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: false
+    })
+  })
+  load_mailbox('inbox');
+}
+
+function archive_email(emailid) {
+  // Mark this email as UNARCHIVED
+  fetch(`/emails/${emailid}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: true
+    })
+  })
+  load_mailbox('inbox');
+}
+
 function view_email(emailid) {
   
   // Show compose view and hide other views
@@ -166,8 +188,24 @@ function view_email(emailid) {
     document.querySelector('#emails').innerHTML += `<p><b>To:</b> ${email.recipients}</p>`;
     document.querySelector('#emails').innerHTML += `<p><b>Subject:</b> ${email.subject}</p>`;
     document.querySelector('#emails').innerHTML += `<p><b>Timestamp:</b> ${email.timestamp}</p>`;
-    // Adding a button for the user to reply and appply it a function
+    // Adding a button for the user to reply and apply it a function
     document.querySelector('#emails').innerHTML += `<button onclick="reply_email(${email.id})" class="btn btn-sm btn-outline-primary" id="replytoemail">Reply</button>`;
+
+    // If email is from "Archived", add button to unarchive email -> Unarchive email
+    console.log('PRINT');
+    // not very elegant way to get user email
+    let user = document.querySelector('h2').innerHTML;
+    console.log(user);
+    console.log(email.recipients);
+    // archive must be true! 
+    if (email.archived === true) {
+      document.querySelector('#emails').innerHTML += `<br><br><button onclick="unarchive_email(${email.id})" class="btn btn-sm btn-outline-secondary" id="unarchive">Unarchive email</button>`;
+    // If email is from "Inbox", add button to archive email -> archive email
+    // archive must be false (OK here) and recipient shodul include user
+    } else if (email.recipients.includes(user) === true) {
+      document.querySelector('#emails').innerHTML += `<br><br><button onclick="archive_email(${email.id})" class="btn btn-sm btn-outline-secondary" id="archive">Archive email</button>`;
+    }
+    
     // Displaying a solid line and the body of the email
     document.querySelector('#emails').innerHTML += `<hr>`;
     document.querySelector('#emails').innerHTML += `<p>${email.body}</p>`;
