@@ -143,7 +143,11 @@ function unarchive_email(emailid) {
       archived: false
     })
   })
-  load_mailbox('inbox');
+  .then(response => {
+    console.log(response);
+    load_mailbox('inbox');
+  });
+  
 }
 
 function archive_email(emailid) {
@@ -154,7 +158,10 @@ function archive_email(emailid) {
       archived: true
     })
   })
-  load_mailbox('inbox');
+  .then(response => {
+    console.log(response);
+    load_mailbox('inbox');
+  });
 }
 
 function view_email(emailid) {
@@ -163,7 +170,7 @@ function view_email(emailid) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   
-  // Hide "messages" div and reset its innerhtml to Nonde
+  // Hide "messages" div and reset its innerhtml to None
   document.querySelector('#messages').style.display = 'block';
   document.querySelector('#messages').innerHTML = '';
 
@@ -193,7 +200,7 @@ function view_email(emailid) {
 
     // If email is from "Archived", add button to unarchive email -> Unarchive email
     console.log('PRINT');
-    // not very elegant way to get user email
+    // not very elegant way to get user email :)
     let user = document.querySelector('h2').innerHTML;
     console.log(user);
     console.log(email.recipients);
@@ -224,7 +231,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
   
-  // Hide "messages" div and reset its innterhtml to Nonde
+  // Hide "messages" div and reset its innerhtml to None
   document.querySelector('#messages').style.display = 'block';
   document.querySelector('#messages').innerHTML = '';
 
